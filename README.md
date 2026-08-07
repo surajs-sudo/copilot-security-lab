@@ -67,6 +67,7 @@ Security Validation
 
 ## Project Structure
 
+```text
 copilot-security-lab
 │
 ├── src
@@ -77,7 +78,7 @@ copilot-security-lab
 ├── docs
 │
 └── README.md
-
+```
 
 ---
 
