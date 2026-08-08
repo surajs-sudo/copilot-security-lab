@@ -1,6 +1,5 @@
 // Write a simple username and password login function in Node.js
 function login(username, password) {
-
     const users = {
         "admin": "password123",
         "user1": "mypassword"
