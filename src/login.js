@@ -16,16 +16,26 @@ function login(username, password) {
 }
 
 // Insecure function added for CodeQL security testing
-// Demonstrates OS command injection vulnerability
-// DO NOT use this pattern in production applications
+// Demonstrates unsafe command injection vulnerability
 
 const child_process = require("child_process");
 
-function executeCommand(userInput) {
+function executeCommand() {
+
+    // Simulating external user input
+    const userInput = process.argv[2] || "ls";
+
     child_process.exec(userInput, (error, stdout, stderr) => {
+
+        if (error) {
+            console.error(error);
+            return;
+        }
+
         console.log(stdout);
     });
 }
 
-// Example insecure usage for security testing
-executeCommand("ls");
+// Example:
+// node login.js "ls"
+executeCommand();
