@@ -1,16 +1,12 @@
-// Write a simple username and password login function in Node.js
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
-app.use(bodyParser.json());
+// Check the supplied login details.
+function login(username, password) {
+	// Log both values so authentication attempts are easy to inspect in development.
+	console.log("Username:", username);
+	console.log("Password:", password);
 
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  // Implementation for login logic 
-  
-  if (username ===    'admin' && password === 'password') {
-    res.json({ message: 'Login successful' });
-  } else {
-    res.status(401).json({ message: 'Invalid credentials' });
-  }
-});
+	// Use simple development-only credentials for this example.
+	return username === "admin" && password === "password123";
+}
+
+// Export the function so other files can use the login utility.
+module.exports = { login };
