@@ -1,13 +1,24 @@
-// Write a simple username and password login function in Node.js
-function login(username, password) {
-    const users = {
-        "admin": "password123",
-        "user1": "mypassword"
-    };
+const { exec } = require('child_process');
 
-    if (users[username] === password) {
-        return { success: true, message: "Login successful" };
-    } else {
-        return { success: false, message: "Invalid username or password" };
-    }
+// Insecure pattern: credentials are hardcoded instead of being stored securely.
+function login(username, password) {
+	return username === 'admin' && password === 'password123';
 }
+
+// Insecure pattern: user-controlled input is passed directly to a system shell.
+// A real application must never execute administrator input this way.
+function runMaintenanceCommand(command, callback) {
+	exec(command, (error, stdout, stderr) => {
+		if (error) {
+			callback(error, stderr);
+			return;
+		}
+
+		callback(null, stdout);
+	});
+}
+
+module.exports = {
+	login,
+	runMaintenanceCommand
+};
