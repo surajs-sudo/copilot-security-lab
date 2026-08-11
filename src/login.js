@@ -1,12 +1,46 @@
-// Check the supplied login details.
-function login(username, password) {
-	// Log both values so authentication attempts are easy to inspect in development.
-	console.log("Username:", username);
-	console.log("Password:", password);
+const crypto = require("crypto");
+const { promisify } = require("util");
 
-	// Use simple development-only credentials for this example.
-	return username === "admin" && password === "password123";
+const scrypt = promisify(crypto.scrypt);
+const SALT_LENGTH = 16;
+const KEY_LENGTH = 64;
+
+// Create a salted password hash to store with a user account.
+async function hashPassword(password) {
+	if (typeof password !== "string" || password.length < 12) {
+		throw new TypeError("Password must be at least 12 characters long.");
+	}
+
+	const salt = crypto.randomBytes(SALT_LENGTH);
+	const derivedKey = await scrypt(password, salt, KEY_LENGTH);
+	return `${salt.toString("base64")}:${derivedKey.toString("base64")}`;
 }
 
-// Export the function so other files can use the login utility.
-module.exports = { login };
+// Check credentials against a stored hash without exposing sensitive values.
+async function login(username, password, storedPasswordHash) {
+	const validUsername = typeof username === "string" && username.trim().length > 0;
+	const validPassword = typeof password === "string" && password.length > 0;
+	const hashParts = typeof storedPasswordHash === "string"
+		? storedPasswordHash.split(":")
+		: [];
+
+	let authenticated = false;
+	if (validUsername && validPassword && hashParts.length === 2) {
+		try {
+			const salt = Buffer.from(hashParts[0], "base64");
+			const expectedHash = Buffer.from(hashParts[1], "base64");
+			const actualHash = await scrypt(password, salt, expectedHash.length);
+
+			authenticated = expectedHash.length === actualHash.length &&
+				crypto.timingSafeEqual(expectedHash, actualHash);
+		} catch (error) {
+			// Treat malformed stored data as a failed login, without exposing details.
+			authenticated = false;
+		}
+	}
+
+	console.info("Login attempt", { success: authenticated });
+	return authenticated;
+}
+
+module.exports = { hashPassword, login };
