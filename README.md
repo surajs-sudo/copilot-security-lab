@@ -295,6 +295,24 @@ The previously detected vulnerability was automatically marked as fixed and move
 
 ---
 
+# 📄 Project Documentation
+
+## Detailed Technical Report
+
+A complete technical report covering the implementation workflow, vulnerability detection, Advanced CodeQL configuration, validation process, and security analysis.
+
+[View Detailed Project Report](./docs/GitHub_Copilot_CodeQL_DevSecOps_Final_Report.pdf)
+
+---
+
+## Assignment Deliverables
+
+A concise submission document containing the required assignment evidence and security analysis summary.
+
+[View Assignment Deliverables](./docs/GitHub_Copilot_CodeQL_Assignment_Deliverables.pdf)
+
+---
+
 # 📸 Project Screenshots
 
 A curated selection of screenshots showcasing the key milestones of this project — from AI-generated vulnerability to final validated, alert-free scanning.
